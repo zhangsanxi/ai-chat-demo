@@ -1,11 +1,26 @@
 import os
 from dotenv import load_dotenv
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
 from openai import OpenAI
 
 load_dotenv()   # 读取 .env 文件
 
+# 创建 FastAPI 应用
+app = FastAPI()
+
+# 允许前端跨域访问（不然后面浏览器会拦截）
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# 创建 AI 客户端
 client = OpenAI(
-    api_key=os.getenv("DEEPSEEK_API_KEY"),   # 从环境变量读，不写死在代码里
+    api_key=os.getenv("DEEPSEEK_API_KEY"),
     base_url="https://api.deepseek.com"
 )
 
